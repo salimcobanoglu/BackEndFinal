@@ -1,14 +1,15 @@
 //Router checklist
-//1. Router i expressten import et. DONE
-//2. Ilgili routeri en altta export et. DONE
-//3. Bir model dosyasi varsa bunu import et. DONE
+//Initial Setup -DONE-
+//1. Router i expressten import et.
+//2. Ilgili routeri en altta export et.
+//3. Bir model dosyasi varsa bunu import et.
 
-//Register & Login icin:
-//4. Eger bcrpyt gibi bi sifreleme kutuphanesi kullanacaksak onu ilgili kutuphaneden import et(bcryptjs) DONE
-//5. Token kullanacaksak da tokeni ilgili kutuphaneden al(jsonwebtoken) DONE
-//6. Secret kullaniyorsak da ilgili index dosyasindan JWT_SECRET i al (secret/index) DONE
+//Register & Login icin: -DONE-
+//4. Eger bcrpyt gibi bi sifreleme kutuphanesi kullanacaksak onu ilgili kutuphaneden import et(bcryptjs)
+//5. Token kullanacaksak da tokeni ilgili kutuphaneden al(jsonwebtoken)
+//6. Secret kullaniyorsak da ilgili index dosyasindan JWT_SECRET i al (secret/index)
 
-//Register Checklist:
+//Register Checklist: -DONE-
 //7. Bodyden username ve password alinir
 //8. Password hashlenerek yeni user olarak tanimlanan passworde aktarilir
 //9. model dosyasindan ilgili yontem ile data base eklenir.
@@ -22,7 +23,7 @@
 //15. token degiskeni sirayla payload, secret ve gecerlilik suresini alarak res basariliysa 201 ile token keyine value olarak olusturulan token atanir.
 //16. hataliysa nexte aktarilir.
 
-//Etkiledigi dosyalar:
+//Etkiledigi dosyalar: -DONE-
 //17. Bu routeri server.js dosyasina import et.
 //18. server.use() icine hangi url i temsil edecekse once onu sonra ilgili degiskeni ekle.
 
@@ -32,13 +33,27 @@ const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await authModel.getAll();
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving the resources." });
+  }
+});
+
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email, avatar_url } = req.body;
     const hashedPassword = bcrpyt.hashSync(password, 8);
     const newUser = {
       username: username,
       password: hashedPassword,
+      email: email,
+      avatar_url: avatar_url,
     };
     const insertedUser = await authModel.create(newUser);
     res.status(201).json(insertedUser);
