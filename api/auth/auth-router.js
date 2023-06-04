@@ -62,4 +62,27 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+router.post("/login", async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    const user = await authModel.getBy({ username: username });
+    const isPasswordMatched = bcrpyt.compareSync(password, user.password);
+    if (!isPasswordMatched) {
+      res.status(400).json({ message: "invalid credentials" });
+    } else {
+      const payload = {
+        username: username,
+        id: user.id,
+      };
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+      res.status(201).json({
+        message: `${user.username} geri geldi!`,
+        token: token,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
