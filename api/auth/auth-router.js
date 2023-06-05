@@ -46,22 +46,27 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.post("/register", mw.usernameBostaMi, async (req, res, next) => {
-  try {
-    const { username, password, email, avatar_url } = req.body;
-    const hashedPassword = bcrpyt.hashSync(password, 8);
-    const newUser = {
-      username: username,
-      password: hashedPassword,
-      email: email,
-      avatar_url: avatar_url,
-    };
-    const insertedUser = await authModel.create(newUser);
-    res.status(201).json(insertedUser);
-  } catch (error) {
-    next(error);
+router.post(
+  "/register",
+  mw.usernameBostaMi,
+  mw.emailBostaMi,
+  async (req, res, next) => {
+    try {
+      const { username, password, email, avatar_url } = req.body;
+      const hashedPassword = bcrpyt.hashSync(password, 8);
+      const newUser = {
+        username: username,
+        password: hashedPassword,
+        email: email,
+        avatar_url: avatar_url,
+      };
+      const insertedUser = await authModel.create(newUser);
+      res.status(201).json(insertedUser);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.post("/login", async (req, res, next) => {
   try {

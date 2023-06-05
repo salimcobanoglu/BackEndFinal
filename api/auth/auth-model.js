@@ -5,7 +5,7 @@ function getAll() {
 }
 
 function getById(id) {
-  return db("users").where("id", id).first();
+  return db("users").where("user_id", id).first();
 }
 
 function getBy(filter) {

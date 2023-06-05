@@ -13,7 +13,7 @@
 const authModel = require("../auth/auth-model");
 const bcryptjs = require("bcryptjs");
 
-//Register
+//Register unique username
 async function usernameBostaMi(req, res, next) {
   try {
     const { username } = req.body;
@@ -29,20 +29,26 @@ async function usernameBostaMi(req, res, next) {
   }
 }
 
-// //register
-// async function usernameBostami(req, res, next) {
-//   try {
-//     let { username } = req.body;
-//     const isExist = await userModel.goreBul({ username: username });
-//     if (isExist && isExist.length > 0) {
-//       res.status(422).json({ message: "Username kullaniliyor" });
-//     } else {
-//       next();
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+//Register unique email
+async function emailBostaMi(req, res, next) {
+  try {
+    const { email } = req.body;
+    const isExist = await authModel.getBy({ email: email });
+    if (isExist && isExist.lenght > 0) {
+      //Burada lenght kontrolu neden yapiyoruz?
+      res.status(422).json({ message: "kullanici zaten mevcut" });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function a(req, res, next) {
+  try {
+  } catch (error) {}
+}
 
 // //Loginde kullanılacak.
 // async function usernameVarmi(req, res, next) {
@@ -102,4 +108,5 @@ async function usernameBostaMi(req, res, next) {
 
 module.exports = {
   usernameBostaMi,
+  emailBostaMi,
 };
