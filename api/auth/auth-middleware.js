@@ -10,14 +10,14 @@
 //5. Loginde kullanmak uzere ilgili username databasede var mi bak. Yine getBy ile bul ve req teki pass ile userdaki pass karsilastir.
 //6. Ek olarak payloadu kontrol eden username veya passwordten biri yoksa hata veren bir mw yaz.
 //7. ESNEK: Istersek bir de sifre uzunlugu en az 3 karakter olacak sekilde bir mw de yazabiliriz.
-const authModel = require("../auth/auth-model");
+const userModel = require("../users/users-model");
 const bcryptjs = require("bcryptjs");
 
 //Register unique username
 async function usernameBostaMi(req, res, next) {
   try {
     const { username } = req.body;
-    const isExist = await authModel.getBy({ username: username });
+    const isExist = await userModel.getBy({ username: username });
     if (isExist && isExist.lenght > 0) {
       //Burada lenght kontrolu neden yapiyoruz?
       res.status(422).json({ message: "kullanici zaten mevcut" });
@@ -33,9 +33,8 @@ async function usernameBostaMi(req, res, next) {
 async function emailBostaMi(req, res, next) {
   try {
     const { email } = req.body;
-    const isExist = await authModel.getBy({ email: email });
-    if (isExist && isExist.lenght > 0) {
-      //Burada lenght kontrolu neden yapiyoruz?
+    const isExist = await userModel.getBy({ email: email });
+    if (isExist) {
       res.status(422).json({ message: "kullanici zaten mevcut" });
     } else {
       next();
@@ -45,9 +44,30 @@ async function emailBostaMi(req, res, next) {
   }
 }
 
-async function a(req, res, next) {
+//5. Loginde kullanmak uzere ilgili username databasede var mi bak. Yine getBy ile bul ve req teki pass ile userdaki pass karsilastir.
+//Login username var mi?
+async function usernameVarmi(req, res, next) {
   try {
-  } catch (error) {}
+    const { username } = req.body;
+    const isExist = await userModel.getBy({ username: username });
+    if (isExist) {
+      let user = isExist;
+      let isPasswordMatch = bcryptjs.compareSync(
+        req.body.password,
+        user.password
+      );
+      if (isPasswordMatch) {
+        req.user = user;
+        next();
+      } else {
+        res.status(401).json({ message: "kullanici mecvut degil" });
+      }
+    } else {
+      res.status(401).json({ message: "kullanici mecvut degil" });
+    }
+  } catch (error) {
+    next(error);
+  }
 }
 
 // //Loginde kullanılacak.
@@ -109,4 +129,5 @@ async function a(req, res, next) {
 module.exports = {
   usernameBostaMi,
   emailBostaMi,
+  usernameVarmi,
 };

@@ -28,7 +28,8 @@
 //18. server.use() icine hangi url i temsil edecekse once onu sonra ilgili degiskeni ekle.
 
 const router = require("express").Router();
-const authModel = require("../auth/auth-model");
+// const authModel = require("../auth/auth-model");
+const userModel = require("../users/users-model");
 const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
@@ -36,7 +37,7 @@ const mw = require("./auth-middleware");
 
 router.get("/users", async (req, res) => {
   try {
-    const users = await authModel.getAll();
+    const users = await userModel.getAll();
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -60,7 +61,7 @@ router.post(
         email: email,
         avatar_url: avatar_url,
       };
-      const insertedUser = await authModel.create(newUser);
+      const insertedUser = await userModel.create(newUser);
       res.status(201).json(insertedUser);
     } catch (error) {
       next(error);
@@ -68,18 +69,20 @@ router.post(
   }
 );
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", mw.usernameVarmi, async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    const user = await authModel.getBy({ username: username });
+    const user = await userModel.getBy({ username: username });
+    console.log(user);
     const isPasswordMatched = bcrpyt.compareSync(password, user.password);
     if (!isPasswordMatched) {
       res.status(400).json({ message: "invalid credentials" });
     } else {
       const payload = {
         username: username,
-        id: user.id,
+        user_id: user.user_id,
       };
+      console.log(payload);
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
       res.status(201).json({
         message: `${user.username} geri geldi!`,
