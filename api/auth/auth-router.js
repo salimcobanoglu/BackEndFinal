@@ -15,7 +15,7 @@
 //9. model dosyasindan ilgili yontem ile data base eklenir.
 //10 basariliysa 201 olarak user json olarak donulur. degilse error nexte aktarilir.
 
-//Login Checklist:
+//Login Checklist: -DONE-
 //11. Bodyden username ve password alinir
 //12. modelden ilgili filtreleme methodu ile ilgili username cekilir
 //13. password ile hashlanen password karsilastirmasi yapilir(compareSync), eger eslesmezse 400 status ile ilgili mesaj donulur
@@ -32,6 +32,7 @@ const authModel = require("../auth/auth-model");
 const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
+const mw = require("./auth-middleware");
 
 router.get("/users", async (req, res) => {
   try {
@@ -45,7 +46,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", mw.usernameBostaMi, async (req, res, next) => {
   try {
     const { username, password, email, avatar_url } = req.body;
     const hashedPassword = bcrpyt.hashSync(password, 8);
