@@ -73,7 +73,20 @@ async function emailBostaMi(req, res, next) {
 }
 //REGISTER ENDED
 
-//Login username var mi?
+//LOGIN
+function checkPayloadLogin(req, res, next) {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      res.status(400).json({ message: "Username or email are required." });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function usernameVarmi(req, res, next) {
   try {
     const { username } = req.body;
@@ -98,14 +111,12 @@ async function usernameVarmi(req, res, next) {
   }
 }
 
+//LOGIN ENDED
+
 module.exports = {
   checkPayload,
   usernameBostaMi,
   emailBostaMi,
   usernameVarmi,
-  // checkPayloadLogin,
-  // isUserAlreadyExist,
-  // hashedPassword,
-  // isUserExist,
-  // passwordCheck,
+  checkPayloadLogin,
 };

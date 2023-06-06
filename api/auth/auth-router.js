@@ -58,29 +58,34 @@ router.post(
   }
 );
 
-router.post("/login", mw.usernameVarmi, async (req, res, next) => {
-  try {
-    const { username, password } = req.body;
-    const user = await userModel.getBy({ username: username });
-    console.log(user);
-    const isPasswordMatched = bcrpyt.compareSync(password, user.password);
-    if (!isPasswordMatched) {
-      res.status(400).json({ message: "invalid credentials" });
-    } else {
-      const payload = {
-        username: username,
-        user_id: user.user_id,
-      };
-      console.log(payload);
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
-      res.status(201).json({
-        message: `${user.username} geri geldi!`,
-        token: token,
-      });
+router.post(
+  "/login",
+  mw.checkPayloadLogin,
+  mw.usernameVarmi,
+  async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
+      const user = await userModel.getBy({ username: username });
+      console.log(user);
+      const isPasswordMatched = bcrpyt.compareSync(password, user.password);
+      if (!isPasswordMatched) {
+        res.status(400).json({ message: "invalid credentials" });
+      } else {
+        const payload = {
+          username: username,
+          user_id: user.user_id,
+        };
+        console.log(payload);
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+        res.status(201).json({
+          message: `${user.username} geri geldi!`,
+          token: token,
+        });
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 module.exports = router;

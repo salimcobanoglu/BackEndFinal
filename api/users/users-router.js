@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//id ile istek calismadi, debug yapalim.
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
