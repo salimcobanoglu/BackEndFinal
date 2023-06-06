@@ -35,18 +35,6 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
 const mw = require("./auth-middleware");
 
-router.get("/users", async (req, res) => {
-  try {
-    const users = await userModel.getAll();
-    res.json(users);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ error: "An error occurred while retrieving the resources." });
-  }
-});
-
 router.post(
   "/register",
   mw.usernameBostaMi,
