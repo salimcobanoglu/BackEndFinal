@@ -12,8 +12,37 @@
 //7. ESNEK: Istersek bir de sifre uzunlugu en az 3 karakter olacak sekilde bir mw de yazabiliriz.
 const userModel = require("../users/users-model");
 const bcryptjs = require("bcryptjs");
+const validator = require("validator");
+const { JWT_SECRET } = require("../secret");
+const jwt = require("jsonwebtoken");
 
-//Register unique username
+//REGISTER
+function checkPayload(req, res, next) {
+  const { username, password, email } = req.body;
+
+  let usernameCheck = username.length > 3;
+  let passwordCheck = password.length > 5;
+  let emailCheck = validator.isEmail(email);
+
+  try {
+    if (!usernameCheck) {
+      res
+        .status(400)
+        .json({ message: "Username must be at least 3 characters." });
+    } else if (!passwordCheck) {
+      res
+        .status(400)
+        .json({ message: "Password must be at least 5 characters." });
+    } else if (!emailCheck) {
+      res.status(400).json({ message: "Email address is not valid." });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function usernameBostaMi(req, res, next) {
   try {
     const { username } = req.body;
@@ -29,7 +58,6 @@ async function usernameBostaMi(req, res, next) {
   }
 }
 
-//Register unique email
 async function emailBostaMi(req, res, next) {
   try {
     const { email } = req.body;
@@ -43,8 +71,8 @@ async function emailBostaMi(req, res, next) {
     next(error);
   }
 }
+//REGISTER ENDED
 
-//5. Loginde kullanmak uzere ilgili username databasede var mi bak. Yine getBy ile bul ve req teki pass ile userdaki pass karsilastir.
 //Login username var mi?
 async function usernameVarmi(req, res, next) {
   try {
@@ -70,64 +98,14 @@ async function usernameVarmi(req, res, next) {
   }
 }
 
-// //Loginde kullanılacak.
-// async function usernameVarmi(req, res, next) {
-//   try {
-//     let { username } = req.body;
-//     const isExist = await userModel.goreBul({ username: username });
-//     if (isExist && isExist.length > 0) {
-//       let user = isExist[0];
-//       let isPasswordMatch = bcryptjs.compareSync(
-//         req.body.password,
-//         user.password
-//       );
-//       if (isPasswordMatch) {
-//         req.dbUser = user;
-//         next();
-//       } else {
-//         res.status(401).json({
-//           message: "Geçersiz kriter",
-//         });
-//       }
-//     } else {
-//       res.status(401).json({
-//         message: "Geçersiz kriter",
-//       });
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
-// //Login ve register
-// function sifreGecerlimi(req, res, next) {
-//   try {
-//     let { password } = req.body;
-//     if (!password || password.length < 3) {
-//       res.status(422).json({ message: "Şifre 3 karakterden fazla olmalı" });
-//     } else {
-//       next();
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-// //Login ve Register
-// function checkPayload(req, res, next) {
-//   try {
-//     let { username, password } = req.body;
-//     if (!username || !password) {
-//       res.status(422).json({ message: "Şifre 3 karakterden fazla olmalı" });
-//     } else {
-//       next();
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
 module.exports = {
+  checkPayload,
   usernameBostaMi,
   emailBostaMi,
   usernameVarmi,
+  // checkPayloadLogin,
+  // isUserAlreadyExist,
+  // hashedPassword,
+  // isUserExist,
+  // passwordCheck,
 };

@@ -37,6 +37,7 @@ const mw = require("./auth-middleware");
 
 router.post(
   "/register",
+  mw.checkPayload,
   mw.usernameBostaMi,
   mw.emailBostaMi,
   async (req, res, next) => {
