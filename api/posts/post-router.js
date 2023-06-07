@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const postModel = require("./post-model");
 const mw = require("./post-middleware");
-// const favsMw = require("../favorites/favorites-middleware");
 
 // Gel all posts
 router.get("/", async (req, res, next) => {
@@ -70,18 +69,5 @@ router.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
-
-//Get favorite post
-// router.get(
-//   "/:id/favorites",
-//   favsMw.checkFavsByPostId,
-//   async (req, res, next) => {
-//     try {
-//       res.status(200).json(req.favUsers);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
 
 module.exports = router;
