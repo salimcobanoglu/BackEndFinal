@@ -33,16 +33,16 @@ exports.up = function (knex) {
         .notNullable()
         .references("user_id")
         .inTable("users")
-        .onUpdate("RESTRICT")
-        .onDelete("RESTRICT");
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
       favorites
         .integer("post_id")
         .unsigned()
         .notNullable()
         .references("post_id")
         .inTable("posts")
-        .onUpdate("RESTRICT")
-        .onDelete("RESTRICT");
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
     });
 };
 
@@ -51,17 +51,8 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  knex.schema
+  return knex.schema
     .dropTableIfExists("favorites")
     .dropTableIfExists("posts")
     .dropTableIfExists("users");
 };
-
-//   .createTable("users", function (table) {
-//     table.increments("user_id");
-//     table.string("username").notNullable().unique();
-//     table.string("password").notNullable();
-//     table.string("avatar_url").notNullable();
-//     table.string("email").notNullable().unique();
-//   });
-// };
