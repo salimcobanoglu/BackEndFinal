@@ -1,14 +1,20 @@
-const favMw = require("./favorites-middleware");
 const router = require("express").Router();
+const favModel = require("./favorites-model");
 
-// Favorites tablosundaki kullanıcının favori postlarını getiren
-router.get("/user/:id", favMw.checkFavsByUserId, (req, res) => {
-  res.json(req.favPosts);
-});
-
-// Favorites tablosundaki bir postu favori yapan kullanıcıları getiren
-router.get("/post/:id", favMw.checkFavsByPostId, (req, res) => {
-  res.json(req.favUsers);
+// add to favorites
+router.post("/:user_id/:post_id", async (req, res, next) => {
+  try {
+    const userId = req.params.user_id;
+    const postId = req.params.post_id;
+    if (userId && postId) {
+      await favModel.create(userId, postId);
+      res.status(200).json({ message: "Post added to favorites." });
+    } else {
+      res.status(400).json({ message: "Cannot add to favorites." });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
