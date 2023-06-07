@@ -23,11 +23,9 @@ module.exports = async (req, res, next) => {
         } else {
           let isLogoutBefore = await tokenHelper.checkIsInsertBlackList(token);
           if (isLogoutBefore) {
-            res
-              .status(400)
-              .json({
-                message: "Daha önce çıkış yapılmış. Tekrar giriş yapınız",
-              });
+            res.status(400).json({
+              message: "Daha önce çıkış yapılmış. Tekrar giriş yapınız",
+            });
           } else {
             req.decodedToken = decodedToken;
             next();
