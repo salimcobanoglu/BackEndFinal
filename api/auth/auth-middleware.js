@@ -113,6 +113,11 @@ async function usernameVarmi(req, res, next) {
 
 //LOGIN ENDED
 
+
+//LOGOUT 
+
+//LOGOUT ENDED
+
 module.exports = {
   checkPayload,
   usernameBostaMi,

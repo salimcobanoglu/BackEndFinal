@@ -88,4 +88,13 @@ router.post(
   }
 );
 
+// router.get("/logout", restricted, (req, res, next) => {
+//   try {
+//     tokenHelper.logout(req.headers.authorization);
+//     res.json({ message: "Çıkış işlemi başarılı" });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 module.exports = router;

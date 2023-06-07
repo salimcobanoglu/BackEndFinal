@@ -1,7 +1,12 @@
 const db = require("../../data/dbconfig");
 
-function getAll() {
-  return db("users");
+async function getAll() {
+  return db("users").select(
+    "users.user_id",
+    "users.username",
+    "users.email",
+    "users.avatar_url"
+  );
 }
 
 function getById(id) {
