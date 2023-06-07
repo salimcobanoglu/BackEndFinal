@@ -22,9 +22,14 @@ async function create(user) {
   return getById(insertedUser[0]);
 }
 
+async function remove(id) {
+  return db("users").where("user_id", id).del();
+}
+
 module.exports = {
   getAll,
   getById,
   create,
   getBy,
+  remove,
 };
