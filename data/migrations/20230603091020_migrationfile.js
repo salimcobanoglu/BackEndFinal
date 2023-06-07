@@ -43,7 +43,31 @@ exports.up = function (knex) {
         .inTable("posts")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
+    })
+    .createTable("tokenBlackList", (t) => {
+      t.increments(), t.string("token").notNullable();
+      t.timestamp("createdate").defaultTo(knex.fn.now());
     });
+  // .createTable("comments", (comments) => {
+  //   comments.increments("comment_id");
+  //   comments.timestamp("created_at").defaultTo(knex.fn.now());
+  //   comments.string("body", 280).notNullable();
+  //   comments.string("image_url");
+  //   comments
+  //     .integer("post_id")
+  //     .notNullable()
+  //     .references("post_id")
+  //     .inTable("posts")
+  //     .onDelete("RESTRICT")
+  //     .onUpdate("RESTRICT");
+  //   comments
+  //     .integer("user_id")
+  //     .notNullable()
+  //     .references("user_id")
+  //     .inTable("users")
+  //     .onDelete("CASCADE")
+  //     .onUpdate("CASCADE");
+  // });
 };
 
 /**
@@ -51,8 +75,12 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema
-    .dropTableIfExists("favorites")
-    .dropTableIfExists("posts")
-    .dropTableIfExists("users");
+  return (
+    knex.schema
+      // .dropTableIfExists("comments")
+      .dropTableIfExists("favorites")
+      .dropTableIfExists("posts")
+      .dropTableIfExists("tokenBlackList")
+      .dropTableIfExists("users")
+  );
 };

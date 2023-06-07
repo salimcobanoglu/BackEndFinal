@@ -6,6 +6,8 @@ exports.seed = async function (knex) {
   await knex("users").truncate();
   await knex("posts").truncate();
   await knex("favorites").truncate();
+  // await knex("comments").truncate();
+
   await knex("users").insert([
     {
       username: "user1",
@@ -57,4 +59,32 @@ exports.seed = async function (knex) {
       post_id: 1,
     },
   ]);
+  // await knex("comments").insert([
+  //   { body: "This is a great article!", user_id: 1, post_id: 7 },
+  //   { body: "Thank you, it was very helpful.", user_id: 1, post_id: 6 },
+  //   {
+  //     body: "Seems like there is missing information.",
+  //     user_id: 1,
+  //     post_id: 5,
+  //   },
+  //   { body: "Exactly what I was looking for!", user_id: 2, post_id: 7 },
+  //   {
+  //     body: "I have a question regarding this topic.",
+  //     user_id: 2,
+  //     post_id: 6,
+  //   },
+  //   {
+  //     body: "I disagree with some points mentioned here.",
+  //     user_id: 2,
+  //     post_id: 5,
+  //   },
+  //   { body: "Well written and easy to understand.", user_id: 3, post_id: 1 },
+  //   { body: "I would love to see more examples.", user_id: 3, post_id: 2 },
+  //   { body: "Great job, keep up the good work!", user_id: 3, post_id: 3 },
+  //   {
+  //     body: "I found a typo in the second paragraph.",
+  //     user_id: 3,
+  //     post_id: 4,
+  //   },
+  // ]);
 };

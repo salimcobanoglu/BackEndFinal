@@ -30,6 +30,7 @@
 const router = require("express").Router();
 // const authModel = require("../auth/auth-model");
 const userModel = require("../users/users-model");
+const tokenHelper = require("../../helper/token-helper");
 const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
@@ -88,13 +89,16 @@ router.post(
   }
 );
 
-// router.get("/logout", restricted, (req, res, next) => {
-//   try {
-//     tokenHelper.logout(req.headers.authorization);
-//     res.json({ message: "Çıkış işlemi başarılı" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.get(
+  "/logout",
+  /*restricted,*/ (req, res, next) => {
+    try {
+      tokenHelper.logout(req.headers.authorization);
+      res.json({ message: "Çıkış işlemi başarılı" });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
