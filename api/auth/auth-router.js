@@ -90,7 +90,16 @@ router.post(
   }
 );
 
-router.get("/logout", (req, res, next) => {
+// router.get("/logout", (req, res, next) => {
+//   try {
+//     tokenHelper.logout(req.headers.authorization);
+//     res.json({ message: "Çıkış işlemi başarılı" });
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+router.get("/logout", restricted, (req, res, next) => {
   try {
     tokenHelper.logout(req.headers.authorization);
     res.json({ message: "Çıkış işlemi başarılı" });
