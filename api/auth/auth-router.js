@@ -35,6 +35,7 @@ const bcrpyt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../secret/index");
 const mw = require("./auth-middleware");
+const restricted = require("../middleware/restricted");
 
 router.post(
   "/register",
@@ -89,16 +90,13 @@ router.post(
   }
 );
 
-router.get(
-  "/logout",
-  /*restricted,*/ (req, res, next) => {
-    try {
-      tokenHelper.logout(req.headers.authorization);
-      res.json({ message: "Çıkış işlemi başarılı" });
-    } catch (error) {
-      next(error);
-    }
+router.get("/logout", (req, res, next) => {
+  try {
+    tokenHelper.logout(req.headers.authorization);
+    res.json({ message: "Çıkış işlemi başarılı" });
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 module.exports = router;

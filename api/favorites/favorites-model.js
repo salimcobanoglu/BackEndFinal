@@ -1,6 +1,11 @@
 const db = require("../../data/dbconfig");
 
-//users' liked posts
+//gel all favorites
+function getAll() {
+  return db("favorites");
+}
+
+//users' all favorites
 async function getById(id) {
   const favPosts = await db("favorites as f")
     .join("posts as p", "f.post_id", "=", "p.post_id")
@@ -24,4 +29,10 @@ function create(user_id, post_id) {
   return db("favorites as f").insert({ user_id: user_id, post_id: post_id });
 }
 
-module.exports = { getById, getByPostId, create };
+function remove(user_id, post_id) {
+  return db("favorites as f")
+    .where({ user_id: user_id, post_id: post_id })
+    .del();
+}
+
+module.exports = { getById, getByPostId, create, getAll, remove };
