@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const userModel = require("./users-model");
+const favMw = require("../favorites/favorites-middleware");
 
 //get all users w/o pass
 router.get("/", async (req, res) => {
@@ -25,7 +26,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-//get user w id
+//delete user
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -39,5 +40,18 @@ router.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+// brings users favorited posts
+router.get(
+  "/:id/favorites",
+  favMw.checkFavsByUserId,
+  async (req, res, next) => {
+    try {
+      res.status(200).json(req.favPosts);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

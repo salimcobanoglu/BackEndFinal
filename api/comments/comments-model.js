@@ -36,16 +36,4 @@ async function create(user_id, post_id, body) {
   return getByCommentId(created);
 }
 
-async function update(user_id, post_id, body) {
-  const updated = await db("comments as c")
-    .update({
-      user_id: user_id,
-      post_id: post_id,
-      body: body,
-    })
-    .where({ user_id: user_id, post_id: post_id });
-
-  return getByCommentId(updated);
-}
-
-module.exports = { getByCommentId, getById, getByPostId, create, update };
+module.exports = { getByCommentId, getById, getByPostId, create };
