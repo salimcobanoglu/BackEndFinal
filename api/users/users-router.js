@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const userModel = require("./users-model");
 const favMw = require("../favorites/favorites-middleware");
+const commentsMw = require("../comments/comments-middleware");
 
 //get all users w/o pass
 router.get("/", async (req, res) => {
@@ -48,6 +49,18 @@ router.get(
   async (req, res, next) => {
     try {
       res.status(200).json(req.favPosts);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/:id/comments",
+  commentsMw.checkCommentsByUserId,
+  async (req, res, next) => {
+    try {
+      res.status(200).json(req.comments);
     } catch (error) {
       next(error);
     }
