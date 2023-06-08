@@ -28,6 +28,7 @@ exports.seed = async function (knex) {
       avatar_url: "avatar3.jpg",
     },
   ]);
+
   await knex("posts").insert([
     {
       body: "Post body 1",
@@ -45,6 +46,13 @@ exports.seed = async function (knex) {
       user_id: 3,
     },
   ]);
+
+  await knex("roles").insert([
+    { user_id: 1, rolename: "Admin" },
+    { user_id: 2, rolename: "User" },
+    { user_id: 3, rolename: "User" },
+  ]);
+
   await knex("favorites").insert([
     {
       user_id: 1,
@@ -59,6 +67,7 @@ exports.seed = async function (knex) {
       post_id: 1,
     },
   ]);
+
   await knex("comments").insert([
     { body: "Bu yazı gerçekten harika!", user_id: 1, post_id: 2 },
     { body: "Teşekkür ederim, çok yardımcı oldu.", user_id: 1, post_id: 1 },

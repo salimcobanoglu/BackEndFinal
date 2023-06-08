@@ -25,6 +25,17 @@ exports.up = function (knex) {
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
     })
+    .createTable("roles", (roles) => {
+      roles.increments("role_id");
+      roles.string("rolename").notNullable().defaultTo("User");
+      roles
+        .integer("user_id")
+        .notNullable()
+        .references("user_id")
+        .inTable("users")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
+    })
     .createTable("favorites", (favorites) => {
       favorites.increments("favorite_id");
       favorites
@@ -79,6 +90,7 @@ exports.down = function (knex) {
     .dropTableIfExists("tokenBlackList")
     .dropTableIfExists("comments")
     .dropTableIfExists("favorites")
+    .dropTableIfExists("roles")
     .dropTableIfExists("posts")
     .dropTableIfExists("users");
 };
