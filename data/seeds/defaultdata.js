@@ -59,32 +59,32 @@ exports.seed = async function (knex) {
       post_id: 1,
     },
   ]);
-  // await knex("comments").insert([
-  //   { body: "This is a great article!", user_id: 1, post_id: 7 },
-  //   { body: "Thank you, it was very helpful.", user_id: 1, post_id: 6 },
-  //   {
-  //     body: "Seems like there is missing information.",
-  //     user_id: 1,
-  //     post_id: 5,
-  //   },
-  //   { body: "Exactly what I was looking for!", user_id: 2, post_id: 7 },
-  //   {
-  //     body: "I have a question regarding this topic.",
-  //     user_id: 2,
-  //     post_id: 6,
-  //   },
-  //   {
-  //     body: "I disagree with some points mentioned here.",
-  //     user_id: 2,
-  //     post_id: 5,
-  //   },
-  //   { body: "Well written and easy to understand.", user_id: 3, post_id: 1 },
-  //   { body: "I would love to see more examples.", user_id: 3, post_id: 2 },
-  //   { body: "Great job, keep up the good work!", user_id: 3, post_id: 3 },
-  //   {
-  //     body: "I found a typo in the second paragraph.",
-  //     user_id: 3,
-  //     post_id: 4,
-  //   },
-  // ]);
+  await knex("comments").insert([
+    { body: "Bu yazı gerçekten harika!", user_id: 1, post_id: 2 },
+    { body: "Teşekkür ederim, çok yardımcı oldu.", user_id: 1, post_id: 1 },
+    {
+      body: "Sanırım eksik bilgiler var.",
+      user_id: 1,
+      post_id: 3,
+    },
+    { body: "Tam da aradığım şey!", user_id: 2, post_id: 2 },
+    {
+      body: "Bu konuyla ilgili bir sorum var.",
+      user_id: 2,
+      post_id: 3,
+    },
+    {
+      body: "Burada bahsedilen bazı noktalara katılmıyorum.",
+      user_id: 2,
+      post_id: 1,
+    },
+    { body: "Güzel yazılmış ve anlaşılır.", user_id: 3, post_id: 1 },
+    { body: "Daha fazla örnek görmek isterim.", user_id: 3, post_id: 2 },
+    { body: "Harika iş, iyi çalışmaya devam!", user_id: 3, post_id: 3 },
+    {
+      body: "İkinci paragrafta bir yazım hatası buldum.",
+      user_id: 3,
+      post_id: 2,
+    },
+  ]);
 };
