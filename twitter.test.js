@@ -40,3 +40,26 @@ test("[2] Post(/register) ile kayıt olunuyor mu?", async () => {
   expect(response.body).toHaveProperty("email", userData.email);
   expect(response.body).toHaveProperty("avatar_url", userData.avatar_url);
 });
+test("[3] post methodu user id ve post id ile yorum ekliyor mu", async () => {
+  //arrange
+  let commentData = {
+    body: "Algoritma Öğren",
+    user_id: 2,
+    post_id: 2,
+  };
+  //act
+  const response = await request(server)
+    .post("/api/comments/2/2")
+    .send(commentData);
+  //assert
+  expect(response.status).toBe(200);
+  expect(response.body.addedComment).toHaveProperty("body", commentData.body);
+  expect(response.body.addedComment).toHaveProperty(
+    "user_id",
+    commentData.user_id
+  );
+  expect(response.body.addedComment).toHaveProperty(
+    "post_id",
+    commentData.post_id
+  );
+});
