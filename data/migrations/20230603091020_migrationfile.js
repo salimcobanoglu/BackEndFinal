@@ -13,7 +13,7 @@ exports.up = function (knex) {
     })
     .createTable("posts", (posts) => {
       posts.increments("post_id");
-      posts.string("body", 300);
+      posts.string("body", 300).notNullable();
       posts.timestamp("created_at").defaultTo(knex.fn.now());
       posts.string("image_url");
       posts
