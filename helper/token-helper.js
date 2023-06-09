@@ -1,11 +1,16 @@
 require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET || "shh";
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const db = require("../data/dbconfig");
 
 // function generateToken(payload) {
 //   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 // }
+
+function decodeTokensPayload(token) {
+  const decodedToken = jwt.verify(token, JWT_SECRET);
+  return decodedToken;
+}
 
 async function logout(token) {
   if (token) {
@@ -26,4 +31,5 @@ module.exports = {
   logout,
   deleteFromBlackListToken,
   checkIsInsertBlackList,
+  decodeTokensPayload,
 };

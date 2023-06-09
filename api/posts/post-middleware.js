@@ -1,4 +1,5 @@
 const validator = require("validator");
+const tokenHelper = require("../../helper/token-helper");
 
 function isImageUrl(url) {
   return (
@@ -30,5 +31,22 @@ const checkPayload = (req, res, next) => {
     next(error);
   }
 };
+const isUserAllowed = async (req, res, next) => {
+  try {
+    const payload = tokenHelper.decodeTokensPayload(
+      req.headers["authorization"]
+    );
+    const userId = req.body.user_id;
+    if (payload.user_id == userId) {
+      next();
+    } else {
+      res.status(400).json({
+        message: `User with id:${payload.user_id} is not allowed.`,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
-module.exports = { checkPayload };
+module.exports = { checkPayload, isUserAllowed };

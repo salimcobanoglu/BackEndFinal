@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const postModel = require("./post-model");
 const mw = require("./post-middleware");
+const restricted = require("../middleware/restricted");
 
 // Gel all posts
 router.get("/", async (req, res, next) => {
@@ -13,22 +14,28 @@ router.get("/", async (req, res, next) => {
 });
 
 //Create new post
-router.post("/", mw.checkPayload, async (req, res, next) => {
-  try {
-    const { body, image_url, user_id } = req.body;
-    const newPost = { user_id: user_id, body: body, image_url: image_url };
-    const insertedPost = await postModel.create(newPost);
-    if (!insertedPost) {
+router.post(
+  "/",
+  restricted,
+  mw.isUserAllowed,
+  mw.checkPayload,
+  async (req, res, next) => {
+    try {
+      const { body, image_url, user_id } = req.body;
+      const newPost = { user_id: user_id, body: body, image_url: image_url };
+      const insertedPost = await postModel.create(newPost);
+      if (!insertedPost) {
+        next(error);
+      } else {
+        res
+          .status(200)
+          .json({ message: "New post successfully submitted.", insertedPost });
+      }
+    } catch (error) {
       next(error);
-    } else {
-      res
-        .status(200)
-        .json({ message: "New post successfully submitted.", insertedPost });
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 //Update post
 
